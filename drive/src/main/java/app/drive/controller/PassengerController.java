@@ -52,5 +52,4 @@ public class PassengerController {
         var passenger = PassengerMapper.toPassengerDto(foundPassenger);
         return new ResponseEntity<>(passenger, HttpStatus.OK);
     }
-
 }
