@@ -30,7 +30,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         long startTime = System.currentTimeMillis();
         var random = new Random();
-        double availabilityThreshold = 0.3;
+        double availabilityThreshold = 0.5; // 50% of the vehicles will be available
         int batchSize = 10000;
 
         Iterator<VehicleEntity> vehicleIterator = vehicleRepository.findAll().iterator();

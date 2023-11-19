@@ -21,8 +21,7 @@ public class CsvImportService {
 
     private static final int BATCH_SIZE = 10000;
 
-
-    // Needs optimisation, takes approximately 8 sec
+    // needs optimisation, takes approximately 8 sec
     @Transactional
     public void importCsvData(String csvFilePath) {
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {

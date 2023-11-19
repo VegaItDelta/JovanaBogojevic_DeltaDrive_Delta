@@ -42,9 +42,10 @@ public class TripService {
 
         var userLocation = new LocationDto(passenger.get().getCurrentLatitude(), passenger.get().getCurrentLongitude());
         var totalDistance = DistanceCalculator.calculateHaversineDistance
-                (userLocation, selectedVehicle.getLatitude(), selectedVehicle.getLongitude())/1000.0; // in km
+                (userLocation, selectedVehicle.getLatitude(), selectedVehicle.getLongitude()); // in km
         var totalPrice = calculateTripPrice(totalDistance, selectedVehicle);
 
+        // Needs to be modified to also save passenger starting location and driver name
         var newTrip = TripEntity.builder()
                 .vehicleEntity(selectedVehicle)
                 .passengerEntity(passenger.get())
@@ -63,9 +64,8 @@ public class TripService {
     private double calculateTripPrice(double totalDistance, VehicleEntity vehicleEntity) {
         var startingPriceWithoutCurrency = vehicleEntity.getStartingPrice().replaceAll("[^0-9.]", "");
         var priceWithoutCurrency = vehicleEntity.getPricePerKm().replaceAll("[^0-9.]", "");
-        var distanceInKm = totalDistance / 1000.0;
 
-        return Double.parseDouble(startingPriceWithoutCurrency) + (Double.parseDouble(priceWithoutCurrency) * distanceInKm);
+        return Double.parseDouble(startingPriceWithoutCurrency) + (Double.parseDouble(priceWithoutCurrency) * totalDistance);
     }
 
     public List<TripDto> getTrips(Long passengerId) {

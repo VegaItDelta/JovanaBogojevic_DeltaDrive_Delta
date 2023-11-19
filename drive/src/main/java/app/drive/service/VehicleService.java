@@ -3,6 +3,7 @@ package app.drive.service;
 import app.drive.model.dto.LocationDto;
 import app.drive.model.dto.PassengerRequestDto;
 import app.drive.model.entity.VehicleEntity;
+import app.drive.repository.PassengerRepository;
 import app.drive.repository.VehicleRepository;
 import app.drive.util.DistanceCalculator;
 import lombok.Data;
@@ -30,6 +31,12 @@ public class VehicleService {
 
     @NonNull
     private final PassengerService passengerService;
+
+    @NonNull
+    private final MotionSimulatorService motionSimulatorService;
+
+    @NonNull
+    private final PassengerRepository passengerRepository;
 
     private static final double EARTH_RADIUS = 6371.0;
     private static final Random random = new Random();
@@ -75,6 +82,7 @@ public class VehicleService {
         if (simulateDriverAcceptance()) {
             tripService.createTrip(selectedVehicle, passengerId);
             selectedVehicle.setAvailable(false);
+            simulateVehicleMovement(selectedVehicle, passengerId);
             isBooked = true;
         }
 
@@ -83,5 +91,12 @@ public class VehicleService {
 
     private boolean simulateDriverAcceptance() {
         return random.nextDouble() > 0.25;
+    }
+
+    private void simulateVehicleMovement(VehicleEntity vehicle, Long passengerId) {
+        var passenger = passengerRepository.findById(passengerId).get();
+
+        motionSimulatorService.simulateDrive(vehicle, passenger.getCurrentLatitude(), passenger.getCurrentLongitude(),
+                passenger.getDesiredLatitude(), passenger.getDesiredLongitude());
     }
 }
