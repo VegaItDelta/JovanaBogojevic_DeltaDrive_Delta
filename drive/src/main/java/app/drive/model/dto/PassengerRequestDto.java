@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
+@AllArgsConstructor
+public class PassengerRequestDto {
 
-    private String email;
-
-    private String password;
-
+    private LocationDto currentLocation;
+    private LocationDto targetLocation;
 }

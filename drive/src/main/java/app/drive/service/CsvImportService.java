@@ -1,23 +1,28 @@
 package app.drive.service;
 
 import app.drive.model.entity.VehicleEntity;
-import app.drive.repository.VehicleEntityRepository;
+import app.drive.repository.VehicleRepository;
 import com.opencsv.CSVReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CsvImportService {
 
     @Autowired
-    private VehicleEntityRepository vehicleEntityRepository;
+    private VehicleRepository vehicleRepository;
 
-    @Transactional 
+    private static final int BATCH_SIZE = 2000;
+
+    @Transactional
     public void importCsvData(String csvFilePath) {
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
+            List<VehicleEntity> vehiclesBatch = new ArrayList<>();
             String[] nextLine;
             boolean firstRow = true;
 
@@ -26,6 +31,7 @@ public class CsvImportService {
                     firstRow = false;
                     continue;
                 }
+
                 VehicleEntity vehicleEntity = new VehicleEntity();
                 vehicleEntity.setId(Long.getLong(nextLine[0]));
                 vehicleEntity.setBrand(nextLine[1]);
@@ -36,8 +42,16 @@ public class CsvImportService {
                 vehicleEntity.setPricePerKm(nextLine[6]);
                 vehicleEntity.setStartingPrice(nextLine[7]);
 
-                vehicleEntityRepository.save(vehicleEntity);
+                vehiclesBatch.add(vehicleEntity);
+
+                if (vehiclesBatch.size() % BATCH_SIZE == 0) {
+                    vehicleRepository.saveAll(vehiclesBatch);
+                    vehiclesBatch.clear();
+                }
             }
+
+            vehicleRepository.saveAll(vehiclesBatch);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

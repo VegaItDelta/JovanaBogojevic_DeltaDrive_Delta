@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
+public class LocationDto {
 
-    private String email;
-
-    private String password;
-
+    private double latitude;
+    private double longitude;
 }

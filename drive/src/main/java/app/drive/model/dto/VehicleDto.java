@@ -1,21 +1,16 @@
-package app.drive.model.entity;
+package app.drive.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 @Data
-@Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class VehicleEntity {
+@NoArgsConstructor
+public class VehicleDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String brand;
@@ -32,7 +27,5 @@ public class VehicleEntity {
 
     private String pricePerKm;
 
-    @Column(name = "IS_AVAILABLE")
     private boolean isAvailable;
-
 }

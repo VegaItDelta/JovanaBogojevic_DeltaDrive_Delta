@@ -6,10 +6,10 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PassengerDto {
 
     private Long id;

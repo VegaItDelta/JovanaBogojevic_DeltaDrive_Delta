@@ -29,6 +29,8 @@ public class PassengerController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PassengerDto> userRegistration(@RequestBody PassengerDto passengerDto) throws Exception {
+        log.info("Received request for passenger registration. ");
+
         var newPassenger = PassengerMapper.toPassengerEntity(passengerDto);
         var createdPassenger = passengerService.createPassenger(newPassenger);
         var createdPassengerDto = PassengerMapper.toPassengerDto(createdPassenger);
@@ -42,6 +44,7 @@ public class PassengerController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<PassengerDto> userLogin(@RequestBody LoginDto loginCredentials) {
+        log.info("Received request for passenger login. ");
         var foundPassenger = passengerService.login(loginCredentials.getEmail(), loginCredentials.getPassword());
 
         if(foundPassenger == null) {
