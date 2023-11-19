@@ -2,10 +2,12 @@ package app.drive.service;
 
 
 import app.drive.model.dto.LocationDto;
+import app.drive.model.dto.TripDto;
 import app.drive.model.entity.PassengerEntity;
 import app.drive.model.entity.TripEntity;
 import app.drive.model.entity.TripRequestStatus;
 import app.drive.model.entity.VehicleEntity;
+import app.drive.model.mapper.TripMapper;
 import app.drive.repository.PassengerRepository;
 import app.drive.repository.TripRepository;
 import app.drive.util.DistanceCalculator;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -62,6 +66,21 @@ public class TripService {
         var distanceInKm = totalDistance / 1000.0;
 
         return Double.parseDouble(startingPriceWithoutCurrency) + (Double.parseDouble(priceWithoutCurrency) * distanceInKm);
+    }
+
+    public List<TripDto> getTrips(Long passengerId) {
+        var foundTrips = tripRepository.findByPassengerEntityId(passengerId);
+        var tripDtos = new ArrayList<TripDto>();
+
+        for (var trip: foundTrips) {
+            var vehicle = trip.getVehicleEntity();
+            var passenger = trip.getPassengerEntity();
+
+            var dto = TripMapper.toDto(trip, vehicle, passenger);
+            tripDtos.add(dto);
+        }
+
+        return tripDtos;
     }
 }
 

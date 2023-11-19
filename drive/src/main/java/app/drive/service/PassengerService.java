@@ -1,5 +1,6 @@
 package app.drive.service;
 
+import app.drive.model.dto.PassengerRequestDto;
 import app.drive.model.entity.PassengerEntity;
 import app.drive.repository.PassengerRepository;
 import lombok.Data;
@@ -29,5 +30,9 @@ public class PassengerService {
 
     public PassengerEntity login(String email, String password) {
         return passengerRepository.findByEmailAndPassword(email, password);
+    }
+
+    public void updatePassengerLocation(PassengerRequestDto passengerRequestDto) {
+        passengerRepository.updatePassengerLocation(passengerRequestDto);
     }
 }

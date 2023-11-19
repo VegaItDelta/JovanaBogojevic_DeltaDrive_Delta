@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface VehicleRepository extends JpaRepository<VehicleEntity, Long> {
 
-
     @Query(value = "SELECT * from VEHICLE_ENTITY where is_available is TRUE", nativeQuery = true)
     List<VehicleEntity> findAvailableVehicles();
 }

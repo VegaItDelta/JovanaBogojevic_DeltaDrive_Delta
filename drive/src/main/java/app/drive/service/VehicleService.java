@@ -28,12 +28,18 @@ public class VehicleService {
     @NonNull
     private final TripService tripService;
 
+    @NonNull
+    private final PassengerService passengerService;
+
     private static final double EARTH_RADIUS = 6371.0;
     private static final Random random = new Random();
 
     public List<VehicleEntity> findNearestVehicles(PassengerRequestDto passengerRequestDto) {
         var currentLocation = passengerRequestDto.getCurrentLocation();
         var targetDestination = passengerRequestDto.getTargetLocation();
+
+        updatePassengerLocation(passengerRequestDto);
+
         var vehicles = vehicleRepository.findAvailableVehicles();
 
         return vehicles.stream()
@@ -41,6 +47,11 @@ public class VehicleService {
                         calculateCombinedDistance(currentLocation, targetDestination, vehicle.getLatitude(), vehicle.getLongitude())))
                 .limit(10)
                 .collect(Collectors.toList());
+    }
+
+    private void updatePassengerLocation(PassengerRequestDto passengerRequestDto) {
+        // everytime a passenger sends a new request for a ride, update their location
+        passengerService.updatePassengerLocation(passengerRequestDto);
     }
 
     private double calculateCombinedDistance(LocationDto userLocation, LocationDto targetDestination, double latitude, double longitude) {
@@ -51,18 +62,19 @@ public class VehicleService {
     }
 
     public boolean handleBooking(Long vehicleId, Long passengerId) {
+        var isBooked = false;
         var foundVehicle = vehicleRepository.findById(vehicleId);
 
         if (foundVehicle.isEmpty()) {
+            log.warn("There is no vehicles with provided vehicleId");
             return false; // Vehicle not found
         }
 
         var selectedVehicle = foundVehicle.get();
-        boolean isBooked = false;
 
         if (simulateDriverAcceptance()) {
-            selectedVehicle.setAvailable(false);
             tripService.createTrip(selectedVehicle, passengerId);
+            selectedVehicle.setAvailable(false);
             isBooked = true;
         }
 

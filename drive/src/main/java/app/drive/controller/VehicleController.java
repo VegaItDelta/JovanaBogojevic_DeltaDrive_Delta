@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -28,9 +29,9 @@ public class VehicleController {
         log.info("Received request to find nearest available vehicles. ");
         var nearestVehicles = vehicleService.findNearestVehicles(passengerRequestDto);
 
-        if(nearestVehicles.isEmpty()) {
+        if (nearestVehicles.isEmpty()) {
             log.warn("There are no available vehicles. ");
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(VehicleMapper.toVehicleDtoList(nearestVehicles), HttpStatus.FOUND);
@@ -41,7 +42,7 @@ public class VehicleController {
         log.info("Received request to book vehicle with id:{}, from passenger:{}", vehicleId, passengerId);
         var isBooked = vehicleService.handleBooking(vehicleId, passengerId);
 
-        if(!isBooked) {
+        if (!isBooked) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Driver rejected the booking request");
         }
 

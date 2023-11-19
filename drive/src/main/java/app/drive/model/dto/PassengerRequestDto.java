@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PassengerRequestDto {
 
+    private Long passengerId;
     private LocationDto currentLocation;
     private LocationDto targetLocation;
 }

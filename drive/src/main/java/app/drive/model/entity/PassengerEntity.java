@@ -39,7 +39,7 @@ public class PassengerEntity {
 
     private double desiredLatitude;
 
-    @OneToMany(mappedBy = "passengerEntity")
+    @OneToMany(mappedBy = "passengerEntity", fetch = FetchType.LAZY)
     private List<TripEntity> tripHistory;
 
 }

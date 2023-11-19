@@ -1,29 +1,23 @@
-package app.drive.model.entity;
+package app.drive.model.dto;
 
+import app.drive.model.entity.PassengerEntity;
+import app.drive.model.entity.TripRequestStatus;
+import app.drive.model.entity.VehicleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 @Data
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripEntity {
+public class TripDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "passenger_id")
     private PassengerEntity passengerEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id")
     private VehicleEntity vehicleEntity;
 
     private TripRequestStatus status;
@@ -39,4 +33,8 @@ public class TripEntity {
     private double targetLongitude;
 
     private double targetLatitude;
+
+    private String driverFirstName;
+
+    private String driverLastName;
 }

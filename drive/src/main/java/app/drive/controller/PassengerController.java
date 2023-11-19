@@ -47,7 +47,7 @@ public class PassengerController {
         log.info("Received request for passenger login. ");
         var foundPassenger = passengerService.login(loginCredentials.getEmail(), loginCredentials.getPassword());
 
-        if(foundPassenger == null) {
+        if (foundPassenger == null) {
             log.error("Invalid credentials. ");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
