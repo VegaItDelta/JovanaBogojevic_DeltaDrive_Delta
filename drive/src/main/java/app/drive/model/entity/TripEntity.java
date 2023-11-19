@@ -39,4 +39,8 @@ public class TripEntity {
     private double targetLongitude;
 
     private double targetLatitude;
+
+    private String driverFirstName;
+
+    private String driverLastName;
 }

@@ -45,13 +45,18 @@ public class TripService {
                 (userLocation, selectedVehicle.getLatitude(), selectedVehicle.getLongitude()); // in km
         var totalPrice = calculateTripPrice(totalDistance, selectedVehicle);
 
-        // Needs to be modified to also save passenger starting location and driver name
         var newTrip = TripEntity.builder()
                 .vehicleEntity(selectedVehicle)
                 .passengerEntity(passenger.get())
                 .totalDistance(totalDistance)
                 .totalPrice(totalPrice)
                 .status(TripRequestStatus.ACCEPTED)
+                .startingLongitude(passenger.get().getCurrentLongitude())
+                .startingLatitude(passenger.get().getCurrentLatitude())
+                .targetLatitude(passenger.get().getDesiredLatitude())
+                .targetLongitude(passenger.get().getDesiredLongitude())
+                .driverFirstName(selectedVehicle.getDriverFirstName())
+                .driverLastName(selectedVehicle.getDriverLastName())
                 .build();
 
         return tripRepository.save(newTrip);

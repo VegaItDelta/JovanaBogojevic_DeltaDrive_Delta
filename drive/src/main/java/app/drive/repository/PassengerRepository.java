@@ -18,6 +18,8 @@ public interface PassengerRepository extends JpaRepository<PassengerEntity, Long
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE passenger_entity SET current_latitude = :#{#updateDTO.currentLocation.latitude}, current_longitude = :#{#updateDTO.currentLocation.longitude}, desired_latitude = :#{#updateDTO.targetLocation.latitude}, desired_longitude = :#{#updateDTO.targetLocation.longitude} WHERE id = :#{#updateDTO.passengerId}", nativeQuery = true)
+    @Query(value = "UPDATE passenger_entity SET current_latitude = :#{#updateDTO.currentLocation.latitude}, " +
+            "current_longitude = :#{#updateDTO.currentLocation.longitude}, desired_latitude = :#{#updateDTO.targetLocation.latitude}, " +
+            "desired_longitude = :#{#updateDTO.targetLocation.longitude} WHERE id = :#{#updateDTO.passengerId}", nativeQuery = true)
     void updatePassengerLocation(@Param("updateDTO") PassengerRequestDto updateDTO);
 }
